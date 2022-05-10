@@ -71,7 +71,7 @@ void draw(){
   // if collision list not empty
   //   for loop through collision list
   //     remove each coin, add 1 to score
-  /*ArrayList<Sprite> collision_list = checkCollisionList(player, coins);
+  ArrayList<Sprite> collision_list = checkCollisionList(player, coins);
   while(collision_list.size() > 0){
     // fill in for loop through collision list
     // remove each coin and add 1 to score
@@ -85,12 +85,12 @@ void draw(){
     }
     collision_list.remove(0);
     score++;
-  }*/
+  }
   
   // call textSize(size), fill(r, g, b) and text(str, x, y) to display score. 
   textSize(32);
   fill(255, 0, 0);
-  text("Coins:" + score, 50, 50);
+  text("Coins:" + score + " (use Arrows)", 50, 50);
 }
 
 // returns whether the two Sprites s1 and s2 collide.

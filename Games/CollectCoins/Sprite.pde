@@ -2,8 +2,8 @@
 
 public class Sprite{
   PImage image;
-  float center_x, center_y;
-  float change_x, change_y;
+  public float center_x, center_y;
+  public float change_x, change_y;
   float w, h;
   
   public Sprite(String filename, float scale, float x, float y){
