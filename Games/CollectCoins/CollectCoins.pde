@@ -71,8 +71,8 @@ void draw(){
   // if collision list not empty
   //   for loop through collision list
   //     remove each coin, add 1 to score
-  ArrayList<Sprite> collision_list = checkCollisionList(player, coins);
-  if(collision_list.size() > 0){
+  /*ArrayList<Sprite> collision_list = checkCollisionList(player, coins);
+  while(collision_list.size() > 0){
     // fill in for loop through collision list
     // remove each coin and add 1 to score
     for(int i=0; i<coins.size(); i++)
@@ -85,7 +85,7 @@ void draw(){
     }
     collision_list.remove(0);
     score++;
-  }
+  }*/
   
   // call textSize(size), fill(r, g, b) and text(str, x, y) to display score. 
   textSize(32);
@@ -116,7 +116,7 @@ public ArrayList<Sprite> checkCollisionList(Sprite s, ArrayList<Sprite> list){
   // see: https://youtu.be/RMmo3SktDJo
   for(Sprite p : list)
   {
-    if(checkCollision(s,p)
+    if(checkCollision(s,p))
     {
       cols.add(p);
     }
