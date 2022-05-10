@@ -1,28 +1,11 @@
-/* CSV Lab
-   This is NOT a coding lab. 
-   Study the code below. Make sure you understand how the code reads in
-   a csv file and create a game/stage map.
-   The code is from the tutorial: https://youtu.be/RhD6bzSHBeI
-   
-   Do the following:
-   1) Modify the "map.csv" file and design a Platformer stage map with all of the tiles given
-   in the data folder.
-   2) Assume the Sprite scale where tiles are 50 x 50, modify the csv file to match
-   the exact dimensions of the window(800 x 600). Since we haven't done scrolling, we can't
-   see tiles outside of this range. 
-*/
-
-
 final static float MOVE_SPEED = 5;
 final static float SPRITE_SCALE = 50.0/128;
 final static float SPRITE_SIZE = 50;
-
 
 //declare global variables
 Sprite p;
 PImage snow, crate, red_brick, brown_brick;
 ArrayList<Sprite> platforms;
-
 
 //initialize them in setup().
 void setup(){
