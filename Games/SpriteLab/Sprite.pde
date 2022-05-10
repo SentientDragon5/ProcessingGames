@@ -25,4 +25,8 @@ public class Sprite{
     center_x += change_x;
     center_y += change_y;
   }
+  public void setVel(float x)
+  {
+    change_x = x;
+  }
 }
