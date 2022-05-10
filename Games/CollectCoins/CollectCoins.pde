@@ -40,9 +40,9 @@ void setup(){
   player = new Sprite("tank.png", TANK_SCALE, width/2, height/2);
 
   // initialize score
-  score = 
+  score = 0;
   // initialize the arrayList coins
-  coins = 
+  coins = new ArrayList<Sprite>();
   // for loop to create coin Sprite and add to coins arraylist
   // randomize their center_x and center_y(use MATH.random() and cast to float)
   for(int i = 0; i < 10; i++){
@@ -61,17 +61,30 @@ void draw(){
   
   // use for each loop to display coins
 
-  
+  for(Sprite c : coins)
+  {
+    c.display();
+  }
   
   // call checkCollisionList and 
   // store the returned collision list(arraylist) of coin Sprites that collide with player.
   // if collision list not empty
   //   for loop through collision list
   //     remove each coin, add 1 to score
-  ArrayList<Sprite> collision_list = 
+  ArrayList<Sprite> collision_list = checkCollisionList(player, coins);
   if(collision_list.size() > 0){
     // fill in for loop through collision list
     // remove each coin and add 1 to score
+    for(int i=0; i<coins.size(); i++)
+    {
+      if(coins.get(i) == collision_list.get(0))
+      {
+        coins.remove(i);
+        break;
+      }
+    }
+    collision_list.remove(0);
+    score++;
   }
   
   // call textSize(size), fill(r, g, b) and text(str, x, y) to display score. 
@@ -99,7 +112,16 @@ public boolean checkCollision(Sprite s1, Sprite s2){
 */ 
 public ArrayList<Sprite> checkCollisionList(Sprite s, ArrayList<Sprite> list){
   // fill in code here
+  ArrayList<Sprite> cols = new ArrayList<Sprite>();
   // see: https://youtu.be/RMmo3SktDJo
+  for(Sprite p : list)
+  {
+    if(checkCollision(s,p)
+    {
+      cols.add(p);
+    }
+  }
+  return cols;
 }
 
 
