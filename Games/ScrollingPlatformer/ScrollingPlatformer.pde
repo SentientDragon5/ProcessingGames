@@ -1,16 +1,17 @@
 /*
-  Jumping Lab:
+  Scrolling Platformer Lab:
   
-  Add jumping ability to the player. 
+  Add scrolling ability to the player. 
   
   For more detail, see the tutorial: 
-  Add Jumping to Player: https://youtu.be/LaftkH8bs9c
+  Scrolling: https://www.youtube.com/watch?v=y4smwQ794_M
   
   
   Complete the code as indicated by the comments.
   Do the following:
-  1) Implement the isOnPlatforms method.
-  2) Implement the keyPressed method so that if user presses 'a', player jumps.
+  1) You'll need implement the method scroll() below. Use the view_x and view_y variables
+  already declared and initialized. 
+  2) Call scroll() in draw().
   See the comments below for more details. 
  
 */
@@ -31,15 +32,20 @@ Sprite player;
 PImage snow, crate, red_brick, brown_brick;
 ArrayList<Sprite> platforms;
 
+float view_x;
+float view_y;
+
+
 //initialize them in setup().
 void setup(){
   size(800, 600);
   imageMode(CENTER);
   player = new Sprite("player.png", 0.8);
-  player.center_x = 500;
+  player.center_x = 100;
   player.center_y = 100;
   platforms = new ArrayList<Sprite>();
- 
+  view_x = 0;
+  view_y = 0;
  
   red_brick = loadImage("red_brick.png");
   brown_brick = loadImage("brown_brick.png");
@@ -52,6 +58,9 @@ void setup(){
 void draw(){
   background(255);
   
+  // call scroll here. Need to call scroll first!
+  scroll();
+  
   player.display();
   resolvePlatformCollisions(player, platforms);
   for(Sprite s: platforms)
@@ -59,25 +68,51 @@ void draw(){
 
 } 
 
+void scroll(){
+  float right_boundary = view_x + width - RIGHT_MARGIN;
+  
+  if(player.getRight() > right_boundary)
+  {
+    view_x += player.getRight() - right_boundary;
+  }
+  
+  float left_boundary = view_x + LEFT_MARGIN;
+  if(player.getLeft() < left_boundary)
+  {
+    view_x -= left_boundary - player.getLeft();
+  }
+  
+  float bottom_boundary = view_y + height - VERTICAL_MARGIN;
+  if(player.getBottom() > bottom_boundary)
+  {
+    view_y -= player.getTop() - bottom_boundary;
+  }
+  
+  float top_boundary = view_y + VERTICAL_MARGIN;
+  if(player.getTop() < top_boundary)
+  {
+    view_y -= top_boundary - player.getTop();
+  }
+  translate(-view_x, -view_y);
+
+
+}
+
+
 // returns true if sprite is one a platform.
 public boolean isOnPlatforms(Sprite s, ArrayList<Sprite> walls){
   // move down say 5 pixels
   s.center_y += 5;
-  ArrayList<Sprite> col_list = checkCollisionList(s, walls);
-  s.center_y -= 5;
-  if(col_list.size() > 0)
-  {
-    return true;
-  }
-  return false;
+
   // check to see if sprite collide with any walls by calling checkCollisionList
+  ArrayList<Sprite> collision_list = checkCollisionList(s, walls);
+  
   // move back up 5 pixels to restore sprite to original position.
-
-
+  s.center_y -= 5;
+  
   // if sprite did collide with walls, it must have been on a platform: return true
   // otherwise return false.
-
-
+  return collision_list.size() > 0; 
 }
 
 
@@ -86,7 +121,6 @@ public boolean isOnPlatforms(Sprite s, ArrayList<Sprite> walls){
 public void resolvePlatformCollisions(Sprite s, ArrayList<Sprite> walls){
   // add gravity to change_y of sprite
   s.change_y += GRAVITY;
-  
   
   // move in y-direction by adding change_y to center_y to update y position.
   s.center_y += s.change_y;
@@ -137,9 +171,7 @@ public void resolvePlatformCollisions(Sprite s, ArrayList<Sprite> walls){
     else if(s.change_x < 0){
         s.setLeft(collided.getRight());
     }
-  }  
-
-}
+  }}
 
 boolean checkCollision(Sprite s1, Sprite s2){
   boolean noXOverlap = s1.getRight() <= s2.getLeft() || s1.getLeft() >= s2.getRight();
@@ -198,28 +230,28 @@ void createPlatforms(String filename){
 
 // called whenever a key is pressed.
 void keyPressed(){
-  if(key == 'd'){
+  if(keyCode == RIGHT){
     player.change_x = MOVE_SPEED;
   }
-  else if(key == 'a'){
+  else if(keyCode == LEFT){
     player.change_x = -MOVE_SPEED;
-  }
-  else if(keyCode == 32 && isOnPlatforms(player, platforms))
-  {
-    player.change_y = - JUMP_SPEED;
   }
   // add an else if and check if key pressed is 'a' and if sprite is on platforms
   // if true then give the sprite a negative change_y speed(use JUMP_SPEED)
   // defined above
+  else if(key == 'a' && isOnPlatforms(player, platforms)){
+    player.change_y = -JUMP_SPEED;
+      
+  }
 
 }
 
 // called whenever a key is released.
 void keyReleased(){
-  if(key == 'd'){
+  if(keyCode == RIGHT){
     player.change_x = 0;
   }
-  else if(key == 'a'){
+  else if(keyCode == LEFT){
     player.change_x = 0;
   }
 }
