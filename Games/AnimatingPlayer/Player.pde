@@ -2,14 +2,24 @@ public class Player extends AnimatedSprite{
   boolean inPlace;
   PImage[] standLeft;
   PImage[] standRight;
+  PImage[] jumpLeft;
+  PImage[] jumpRight;
+  boolean onPlatform;
   public Player(PImage img, float scale){
     super(img, scale);
     direction = RIGHT_FACING;
     inPlace = true;
+    onPlatform = true;
     standLeft = new PImage[1];
     standLeft[0] = loadImage("player_stand_left.png");
     standRight = new PImage[1];
     standRight[0] = loadImage("player_stand_right.png");
+    
+    jumpLeft = new PImage[1];
+    jumpLeft[0] = loadImage("player_stand_left.png");
+    jumpRight = new PImage[1];
+    jumpRight[0] = loadImage("player_stand_right.png");
+    
     moveLeft = new PImage[2];
     moveLeft[0] = loadImage("player_walk_left1.png");
     moveLeft[1] = loadImage("player_walk_left2.png");
@@ -24,8 +34,9 @@ public class Player extends AnimatedSprite{
     // update inPlace variable: player is inPlace if it is not moving
     // in both direction.
     // call updateAnimation of parent class AnimatedSprite.
-
-
+    onPlatform = isOnPlatforms(this, platforms);
+    inPlace = change_x == 0 && change_y ==0;
+    super.updateAnimation();
   }
   @Override
   public void selectDirection(){
@@ -49,10 +60,24 @@ public class Player extends AnimatedSprite{
       if(inPlace){
         currentImages = standRight;
       }
+      else if(!onPlatform)
+      {
+        currentImages = jumpRight;
+      }
       else
         currentImages = moveRight;
     }
-
+    else if(direction == LEFT_FACING){
+      if(inPlace){
+        currentImages = standLeft;
+      }
+      else if(!onPlatform)
+      {
+        currentImages = jumpLeft;
+      }
+      else
+        currentImages = moveLeft;
+    }
     
   }
 }

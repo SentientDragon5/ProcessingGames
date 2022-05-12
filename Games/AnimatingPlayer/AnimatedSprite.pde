@@ -11,7 +11,7 @@ public class AnimatedSprite extends Sprite{
   // as null. 
   public AnimatedSprite(PImage img, float scale){
     // TODO: fill in one line of code
-
+    super(img, scale);
     
     direction = NEUTRAL_FACING;
     index = 0;
