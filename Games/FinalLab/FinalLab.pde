@@ -31,6 +31,7 @@ final static float VERTICAL_MARGIN = 40;
 final static int NEUTRAL_FACING = 0; 
 final static int RIGHT_FACING = 1; 
 final static int LEFT_FACING = 2; 
+final static int GROUND_LEVEL = 600; 
 
 PImage playerImage;
 Player player;
@@ -96,9 +97,37 @@ void draw(){
   else
   {
     updateAll();
+    collectCoins();
+    checkDeath();
   }
 }
 
+
+void checkDeath()
+{
+  boolean collideEnemy = false;
+  for(Enemy e : enemies)
+  {
+    collideEnemy = collideEnemy || checkCollision(player, e);
+  }
+  boolean fallOffCliff = player.getBottom() > GROUND_LEVEL;
+  if(collideEnemy || fallOffCliff)
+  {
+    player.lives--;
+    if(player.lives ==0)
+    {
+      isGameOver = true;
+    }
+    else
+    {
+      //player.center_x = 100;
+      //player.setBottom(GROUND_LEVEL);
+      player.center_x = width/2;
+      player.center_y = height/2;
+    }
+  }
+  
+}
 void displayAll()
 {
   player.display();
@@ -145,7 +174,8 @@ void collectCoins()
        score++;
     }
   }
-  
+  if(coins.size() <= 0)
+  isGameOver = true;
 }
 
 void scroll(){
@@ -337,6 +367,10 @@ void keyPressed(){
   else if(key == 'a' && isOnPlatforms(player, platforms)){
     player.change_y = -JUMP_SPEED;
       
+  }
+  if(isGameOver && key == ' ')
+  {
+    setup();
   }
 
 }
