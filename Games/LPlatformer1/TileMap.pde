@@ -102,18 +102,48 @@ public boolean overlap(int x, int y)
     return false;
   return tiles[r][c] != 0;
 }
-public float raycastDown(int x, int y, int d)
+public float raycastVertical(int x, int y, boolean positive, int d)
 {
   int v = y;
-  while(v < d)
+  if(positive)
   {
-    if(overlap(x,v))
-    {
-      break;
+    while(v < d){
+      if(overlap(x,v))
+        break;
+      v++;
     }
-    v++;
   }
+  else
+  {
+    while(v > d){
+      if(overlap(x,v))
+        break;
+      v--;
+    }
+  }
+  
   return y - v;
+}
+public float raycastHorizontal(int x, int y, boolean positive, int d)
+{
+  int u = x;
+  if(positive)
+  {
+    while(u < d){
+      if(overlap(u,y))
+        break;
+      u++;
+    }
+  }
+  else
+  {
+    while(u > d){
+      if(overlap(u,y))
+        break;
+      u--;
+    }
+  }
+  return x - u;
 }
   
 }
