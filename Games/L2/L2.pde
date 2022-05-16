@@ -145,6 +145,7 @@ void updateAll()
   }
   
 }
+
 void collectCoins()
 {
   ArrayList<Sprite> collision_list = checkCollisionList(player, coins);
@@ -227,7 +228,8 @@ public void resolvePlatformCollisions(Sprite s, ArrayList<Sprite> walls){
     else if(s.change_x < 0){
         s.setLeft(collided.getRight());
     }
-  }}
+  }
+}
 
 boolean checkCollision(Sprite s1, Sprite s2){
   boolean noXOverlap = s1.getRight() <= s2.getLeft() || s1.getLeft() >= s2.getRight();
@@ -252,16 +254,19 @@ public ArrayList<Sprite> checkCollisionList(Sprite s, ArrayList<Sprite> list){
 
 // called whenever a key is pressed.
 void keyPressed(){
-  if(keyCode == 'd'){
+    System.out.println(" any " + keyCode);
+  if(keyCode == 68){//d
     player.change_x = MOVE_SPEED;
+    System.out.println("D");
   }
-  else if(keyCode == 'a'){
+  else if(keyCode == 65){//a
     player.change_x = -MOVE_SPEED;
+    System.out.println("A");
   }
   // add an else if and check if key pressed is 'a' and if sprite is on platforms
   // if true then give the sprite a negative change_y speed(use JUMP_SPEED)
   // defined above
-  else if(key == ' ' && isOnPlatforms(player, platforms)){
+  else if(key == ' ' && isOnPlatforms(player, tilemap.tiles)){
     player.change_y = -JUMP_SPEED;
       
   }
@@ -274,10 +279,10 @@ void keyPressed(){
 
 // called whenever a key is released.
 void keyReleased(){
-  if(keyCode == 'd'){
+  if(keyCode == 68){//d
     player.change_x = 0;
   }
-  else if(keyCode == 'a'){
+  else if(keyCode == 65){//a
     player.change_x = 0;
   }
 }

@@ -1,21 +1,5 @@
 /*
-  Animating the Player Lab:
-  
-  In this lab, we will animate a player as he walks left and right.
-  To keep things simple, we won't have jumping or any platform collisions.
-    
-  There are two versions of this lab:
-  1) Friendly Version. More helper code is provided in lab template.
-  2) More Challenging Version. Less helper code is provided.
-  For more detail, see the tutorial: https://youtu.be/l7kKqx6puAo
-   
-  This is the more friendly version.
-  
-  Complete the code as indicated by the comments.
-  Do the following:
-  1) Implement the AnimatedSprite and Player class. 
-  2) In draw, call display, update and updateAnimation on player. 
- 
+  Logan Shehane
 */
 
 final static float MOVE_SPEED = 4;
