@@ -24,6 +24,8 @@ PImage playerImage;
 Player player;
 PImage snow, crate, red_brick, brown_brick, coin;
 
+AnimatedSprite transition;
+
 ArrayList<Enemy> enemies; 
 ArrayList<Sprite> platforms;
 ArrayList<Sprite> coins; 
@@ -43,6 +45,8 @@ void setup(){
   player = new Player();//new Player(playerImage, 0.8);
   player.center_x = width/2;
   player.center_y = height/2;
+  
+  transition = new AnimatedSprite(createAnim("Transition/Transition_",10,""),32);
   
   coins = new ArrayList<Sprite>();
   enemies = new ArrayList<Enemy>();
@@ -101,6 +105,19 @@ void draw(){
     updateAll();
     //collectCoins();
     checkDeath();
+  }
+  if(isGameOver && transition.index < transition.standNeutral.length-1)
+  {
+    transition.center_x = player.center_x;
+    transition.center_y = player.center_y - 25;
+    transition.updateAnimation();
+    transition.display();
+  }
+  else if(isGameOver)
+  {
+    transition.index = transition.standNeutral.length-1;
+    transition.display();
+    setup();
   }
 }
 
@@ -325,7 +342,25 @@ public ArrayList<Sprite> checkCollisionList(Sprite s, ArrayList<Sprite> list){
   return collision_list;
 }
 
-
+public PImage[] createAnim(String path, int len, String flip)
+  {
+    PImage[] anim = new PImage[len];
+    for(int i=0; i<len; i++)
+    {
+      anim[i] = loadImage(path + i + flip + ".png");
+    }
+    return anim;
+  }
+  public PImage[] createAnim(String path, int start, int end, String flip)
+  {
+    PImage[] anim = new PImage[end-start];
+    for(int i=start; i<end; i++)
+    {
+      anim[i-start] = loadImage(path + i + flip + ".png");
+    }
+    return anim;
+  }
+  
 void createPlatforms(String filename){
   String[] lines = loadStrings(filename);
   for(int row = 0; row < lines.length; row++){

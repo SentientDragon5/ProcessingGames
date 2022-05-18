@@ -23,6 +23,7 @@ public class AnimatedSprite extends Sprite{
     standNeutral = anim;
     currentImages = anim;
   }
+  
   public void updateAnimation(){
   // TODO:
   // frame is increased by 1

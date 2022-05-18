@@ -16,7 +16,7 @@ public class Player extends AnimatedSprite{
   
   boolean onPlatform;
   int lives;
-  boolean dead;
+  boolean stopAnimating;
   public Player()
   {
     this(loadImage("Frog/frogIdle_0_v.png"),4.0);
@@ -26,6 +26,7 @@ public class Player extends AnimatedSprite{
     direction = RIGHT_FACING;
     inPlace = true;
     onPlatform = true;
+    stopAnimating = false;
     
     idleL = createAnim("Frog/frogIdle1_",7,"_v");
     idleR = createAnim("Frog/frogIdle1_",7,"");
@@ -61,24 +62,7 @@ public class Player extends AnimatedSprite{
     left = false;
     right = false;
   }
-  public PImage[] createAnim(String path, int len, String flip)
-  {
-    PImage[] anim = new PImage[len];
-    for(int i=0; i<len; i++)
-    {
-      anim[i] = loadImage(path + i + flip + ".png");
-    }
-    return anim;
-  }
-  public PImage[] createAnim(String path, int start, int end, String flip)
-  {
-    PImage[] anim = new PImage[end-start];
-    for(int i=start; i<end; i++)
-    {
-      anim[i-start] = loadImage(path + i + flip + ".png");
-    }
-    return anim;
-  }
+  
   
   @Override
   public void updateAnimation(){
@@ -88,7 +72,9 @@ public class Player extends AnimatedSprite{
     // call updateAnimation of parent class AnimatedSprite.
     onPlatform = isOnPlatforms(this, platforms);
     inPlace = change_x == 0 && change_y ==0;
-    super.updateAnimation();
+    if(!isGameOver || (isGameOver && index < dieR.length-1))
+      super.updateAnimation();
+    
   }
   @Override
   public void selectDirection(){
@@ -109,7 +95,10 @@ public class Player extends AnimatedSprite{
     //       select standLeft images
     //    else select moveLeft images
     if(direction == RIGHT_FACING){
-      if(inPlace){
+      if(isGameOver){
+        currentImages = dieR;
+      }
+      else if(inPlace){
         currentImages = idleR;
       }
       else if(!onPlatform)
@@ -120,7 +109,10 @@ public class Player extends AnimatedSprite{
         currentImages = walkR;
     }
     else if(direction == LEFT_FACING){
-      if(inPlace){
+      if(isGameOver){
+        currentImages = dieL;
+      }
+      else if(inPlace){
         currentImages = idleL;
       }
       else if(!onPlatform)
