@@ -166,8 +166,8 @@ public class Player extends AnimatedSprite{
     {
       change_x -= sign * XACCEL * 2;;// * DELTATIME;
     }
-    println(change_x);
-    if(abs(change_x) < 0.1)
+    //println(change_x);
+    if(abs(change_x) < 0.2)
       change_x = 0;
     //sign =0;
     if(change_x > 0)

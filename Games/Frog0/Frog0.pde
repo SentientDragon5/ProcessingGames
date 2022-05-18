@@ -103,7 +103,7 @@ void draw(){
 void checkDeath()
 {
   collide.checkDeath();
-  
+  //println(collide.checkDeath());
   boolean collideEnemy = false;
   for(Enemy e : enemies)
   {
@@ -224,6 +224,22 @@ public boolean isOnPlatforms(Sprite s, ArrayList<Sprite> walls){
   // if sprite did collide with walls, it must have been on a platform: return true
   // otherwise return false.
   return collision_list.size() > 0; 
+}
+public boolean isTouching(Sprite a, Sprite b)
+{
+  boolean touching = false;
+  a.center_x += 5;
+  touching = touching || checkCollision(a,b);
+  a.center_x -= 10;
+  touching = touching || checkCollision(a,b);
+  a.center_x += 5;
+  
+  a.center_y += 5;
+  touching = touching || checkCollision(a,b);
+  a.center_y -= 10;
+  touching = touching || checkCollision(a,b);
+  a.center_y += 5;
+  return touching;
 }
 
 
@@ -354,6 +370,10 @@ void createPlatforms(String filename){
   }
 }
 
+public void onDie()
+{
+  
+}
 
 // called whenever a key is pressed.
 void keyPressed(){

@@ -1,6 +1,7 @@
 public class TileMap
 {
   ArrayList<Sprite> tiles;
+  ArrayList<Spikes> spikes;
   public TileMap(String filename){
     tiles = new ArrayList<Sprite>();
     createPlatforms(filename);
@@ -17,13 +18,26 @@ public class TileMap
   {
     for(Sprite s : tiles)
     {
-      //ddif(
-      //s.updateAnimation();
+      if( s instanceof AnimatedSprite)
+      {      
+        ((AnimatedSprite)s).updateAnimation();
+      }
     }
   }
   public boolean checkDeath()
   {
-    return false;
+    boolean collideSpike = false;
+    for(Sprite s : tiles)
+    {
+      if( s instanceof Spikes)
+      {      
+        //((Spikes)s).updateAnimation();
+        if(isTouching(player, s))
+          onDie();
+        collideSpike = collideSpike || checkCollision(player, s);
+      }
+    }
+    return collideSpike;
   }
   
 void createPlatforms(String filename){
@@ -55,13 +69,9 @@ void createPlatforms(String filename){
         s = new Sprite(img, 4);
       }
       
-      if(s!= null)
-      {
-        s.center_x = SPRITE_SIZE/2 + col * SPRITE_SIZE;
-        s.center_y = SPRITE_SIZE/2 + row * SPRITE_SIZE;
-        tiles.add(s);
-        
-      }
+      s.center_x = SPRITE_SIZE/2 + col * SPRITE_SIZE;
+      s.center_y = SPRITE_SIZE/2 + row * SPRITE_SIZE;
+      tiles.add(s);
       
       
     }
