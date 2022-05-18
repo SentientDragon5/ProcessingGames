@@ -53,7 +53,7 @@ void createPlatforms(String filename){
       }
       int i = int(values[col]);
       Sprite s = null;
-      if(i==96)
+      if(i==96 || i==97 || i==98 || i==99)
       {
         PImage img;
         img = loadImage(filePath + i + ".png");
