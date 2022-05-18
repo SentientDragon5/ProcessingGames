@@ -179,4 +179,16 @@ public class Player extends AnimatedSprite{
       change_x = sign * MOVE_SPEED;
     }
   }
+  
+  public void setDeathAnim()
+  {
+    index=0;
+    frame =0;
+    if(direction == RIGHT_FACING){
+      currentImages = dieR;
+    }
+    else if(direction == LEFT_FACING){
+      currentImages = dieL;
+    }
+  }
 }

@@ -39,7 +39,7 @@ void setup(){
   size(800, 600);
   smooth(0);
   imageMode(CENTER);
-  playerImage = loadImage("player_stand_right.png");
+  //playerImage = loadImage("player_stand_right.png");
   player = new Player();//new Player(playerImage, 0.8);
   player.center_x = width/2;
   player.center_y = height/2;
@@ -83,6 +83,9 @@ void draw(){
   
   if(isGameOver)
   {
+    
+  player.updateAnimation();
+    /*
     fill(0,0,255);
     text("GAME OVER!", view_x + width/2 - 100, view_y + height/2);
     if(player.lives == 0)
@@ -90,6 +93,8 @@ void draw(){
     else
       text("You Win!", view_x + width/2 - 100, view_y + height/2 + 50);
       text("Press SPACE to restart!",  view_x + width/2 - 100, view_y + height/2 + 100);
+      */
+      
   }
   else
   {
@@ -372,7 +377,12 @@ void createPlatforms(String filename){
 
 public void onDie()
 {
-  
+  isGameOver = true;
+  //still update animation
+  //stop motion
+  //show transition
+  //frog die
+  player.setDeathAnim();
 }
 
 // called whenever a key is pressed.

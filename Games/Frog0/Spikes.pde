@@ -4,7 +4,7 @@ public class Spikes extends Sprite
   {
     super(img, scale);
   }
-  /*
+  
   @Override
   void setTop(float top){
     center_y = top;
@@ -12,5 +12,5 @@ public class Spikes extends Sprite
   @Override
   float getTop(){
     return center_y;
-  }*/
+  }
 }
