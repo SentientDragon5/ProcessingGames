@@ -58,6 +58,8 @@ public class Player extends AnimatedSprite{
     currentImages = standRight;
     
     lives = 3;
+    left = false;
+    right = false;
   }
   public PImage[] createAnim(String path, int len, String flip)
   {
@@ -129,5 +131,52 @@ public class Player extends AnimatedSprite{
         currentImages = walkL;
     }
     
+  }
+  boolean left;
+  boolean right;
+  // Accelerate and decelerate 
+  public void setXSpeed()
+  {
+    float sign = 0;
+    if(change_x > 0)
+      sign = 1;
+    else if(change_x < 0)
+      sign = -1;
+      
+      
+    if(left && right)
+    {
+      
+    }
+    else if(left)
+    {
+      if(sign == -1)
+        change_x -= XACCEL;// * DELTATIME;
+      else
+        change_x -= XACCEL * 2;
+    }
+    else if(right)
+    {
+      if(sign == 1)
+        change_x += XACCEL;// * DELTATIME;
+      else
+        change_x += XACCEL * 2;
+    }
+    else
+    {
+      change_x -= sign * XACCEL * 2;;// * DELTATIME;
+    }
+    println(change_x);
+    if(abs(change_x) < 0.1)
+      change_x = 0;
+    //sign =0;
+    if(change_x > 0)
+      sign = 1;
+    else if(change_x < 0)
+      sign = -1;
+    if(abs(change_x) >= MOVE_SPEED)
+    {
+      change_x = sign * MOVE_SPEED;
+    }
   }
 }

@@ -16,6 +16,9 @@ final static int NEUTRAL_FACING = 0;
 final static int RIGHT_FACING = 1; 
 final static int LEFT_FACING = 2; 
 final static int GROUND_LEVEL = 1200;//600; 
+final static float DELTATIME = 1/60;
+
+final static float XACCEL = 0.2;
 
 PImage playerImage;
 Player player;
@@ -31,8 +34,6 @@ boolean isGameOver;
 
 float view_x;
 float view_y;
-
-float end_xdd
 
 void setup(){
   size(800, 600);
@@ -77,8 +78,8 @@ void draw(){
   
   fill(255,0,0);
   textSize(32);
-  text("Coins: " + score, view_x + 50, view_y + 50);
-  text("Lives: " + player.lives, view_x + 50, view_y +100);
+  //text("Coins: " + score, view_x + 50, view_y + 50);
+  //text("Lives: " + player.lives, view_x + 50, view_y +100);
   
   if(isGameOver)
   {
@@ -93,7 +94,7 @@ void draw(){
   else
   {
     updateAll();
-    collectCoins();
+    //collectCoins();
     checkDeath();
   }
 }
@@ -101,6 +102,8 @@ void draw(){
 
 void checkDeath()
 {
+  collide.checkDeath();
+  
   boolean collideEnemy = false;
   for(Enemy e : enemies)
   {
@@ -141,14 +144,15 @@ void displayAll()
   //for(Sprite s: platforms)
     //s.display();
   collide.display();
+  
 }
 void updateAll()
 {
   player.updateAnimation();
   player.selectCurrentImages();
-  
+  player.setXSpeed();
   resolvePlatformCollisions(player, platforms);
-  
+  collide.update();
   
   for(Enemy e : enemies)
   {
@@ -350,18 +354,24 @@ void createPlatforms(String filename){
   }
 }
 
+
 // called whenever a key is pressed.
 void keyPressed(){
+  if(key == 'a')
+    player.left = true;
+  if(key == 'd')
+    player.right = true;
+  /*
   if(key == 'd'){
     player.change_x = MOVE_SPEED;
   }
   else if(key == 'a'){
     player.change_x = -MOVE_SPEED;
-  }
+  }*/
   // add an else if and check if key pressed is 'a' and if sprite is on platforms
   // if true then give the sprite a negative change_y speed(use JUMP_SPEED)
   // defined above
-  else if(key == ' ' && isOnPlatforms(player, platforms)){
+  if(key == ' ' && isOnPlatforms(player, platforms)){
     player.change_y = -JUMP_SPEED;
       
   }
@@ -374,10 +384,15 @@ void keyPressed(){
 
 // called whenever a key is released.
 void keyReleased(){
-  if(key == 'd'){
+  if(key == 'a')
+    player.left = false;
+  if(key == 'd')
+    player.right = false;
+  
+  /*if(key == 'd'){
     player.change_x = 0;
   }
   else if(key == 'a'){
     player.change_x = 0;
-  }
+  }*/
 }

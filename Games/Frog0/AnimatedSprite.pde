@@ -17,6 +17,12 @@ public class AnimatedSprite extends Sprite{
     index = 0;
     frame = 0;
   }
+  public AnimatedSprite(PImage[] anim, float scale)
+  {
+    this(anim[0], scale);
+    standNeutral = anim;
+    currentImages = anim;
+  }
   public void updateAnimation(){
   // TODO:
   // frame is increased by 1
