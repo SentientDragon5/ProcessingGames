@@ -17,6 +17,8 @@ public class Player extends AnimatedSprite{
   boolean onPlatform;
   int lives;
   boolean stopAnimating;
+  
+  int margin;
   public Player()
   {
     this(loadImage("Frog/frogIdle_0_v.png"),4.0);
@@ -61,6 +63,7 @@ public class Player extends AnimatedSprite{
     lives = 3;
     left = false;
     right = false;
+     margin = 1;
   }
   
   
@@ -185,6 +188,29 @@ public class Player extends AnimatedSprite{
   }
   
   
-  
+  void setLeft(float left){
+    center_x = left + w/2 - margin;
+  }
+  float getLeft(){
+    return center_x - w/2 + margin;
+  }
+  void setRight(float right){
+    center_x = right - w/2 + margin;
+  }
+  float getRight(){
+    return center_x + w/2 - margin;
+  }
+  void setTop(float top){
+    center_y = top + h/2;
+  }
+  float getTop(){
+    return center_y - h/2;
+  }
+  void setBottom(float bottom){
+    center_y = bottom - h/2;
+  }
+  float getBottom(){
+    return center_y + h/2;
+  }
   
 }

@@ -20,6 +20,16 @@ final static float DELTATIME = 1/60;
 
 final static float XACCEL = 0.2;
 
+
+// 0 = StartMenu
+// 1 = Game
+// 2 = Pause
+int gameMode = 0;
+
+// Menu
+Sprite title;
+
+// Game
 PImage playerImage;
 Player player;
 PImage snow, crate, red_brick, brown_brick, coin;
@@ -38,12 +48,16 @@ boolean lose;
 float view_x;
 float view_y;
 
+
 void setup(){
   size(800, 600);
   smooth(0);
   imageMode(CENTER);
-  //playerImage = loadImage("player_stand_right.png");
-  player = new Player();//new Player(playerImage, 0.8);
+  
+  if(gameMode == 1)
+  {
+    // Game
+    player = new Player();//new Player(playerImage, 0.8);
   player.center_x = width/2;
   player.center_y = height/2;
   
@@ -58,22 +72,33 @@ void setup(){
   lose = true;
   score = 0;
   
-  red_brick = loadImage("red_brick.png");
-  brown_brick = loadImage("brown_brick.png");
-  crate = loadImage("crate.png");
-  snow = loadImage("snow.png");
-  coin = loadImage("gold1.png");
-  //createPlatforms("map.csv");
-  
   collide = new TileMap("collide.csv");
   //platforms = collide.tiles;
   for(int i=0; i<collide.tiles.size(); i++)
   {
     platforms.add(collide.tiles.get(i));
   }
+  //end game Setup
+  }
+  else
+  {
+    title = new Sprite(loadImage("Menu/Froglet.png"), .4);
+  }
+  
 }
 
+// ================================================ //
+//                   Start Draw                     //
+// ================================================ //
 void draw(){
+  fill(255);
+  PFont mono;
+  mono = createFont("Menu/Pixellari.ttf", 16);
+  textFont(mono);
+  textSize(32);
+  
+  if(gameMode == 1)
+  {
   //background(255);
   //background(33,38,63);
   background(29,32,48);
@@ -83,7 +108,6 @@ void draw(){
   
   
   fill(255,0,0);
-  textSize(32);
   //text("Coins: " + score, view_x + 50, view_y + 50);
   //text("Lives: " + player.lives, view_x + 50, view_y +100);
   
@@ -118,10 +142,35 @@ void draw(){
   {
     transition.index = transition.standNeutral.length-1;
     transition.display();
+    if(!lose)
+      gameMode = 3;
     setup();
   }
+  }
+  else
+  {
+    background(29,32,48);
+    title.center_x = width/2;
+    title.center_y = height/2 - 50;
+    title.display();
+    
+    fill(255);
+    text("Press Space to start", width/2, height/2 + 50);
+    //text("Lives: " + player.lives, view_x + 50, view_y +100);
+    if(gameMode == 2)
+    {
+      text("GamePaused", width/2, height/2 -150);
+    }
+    if(gameMode == 3)
+    {
+      text("You Win!", width/2, height/2 - 150);
+    }
+    
+  }
 }
-
+// ================================================ //
+//                    End Draw                      //
+// ================================================ //
 
 void checkDeath()
 {
@@ -291,7 +340,7 @@ public void resolvePlatformCollisions(Sprite s, ArrayList<Sprite> walls){
          set top of sprite to equal bottom of platform
        set sprite's change_y to 0
   */
-  if(col_list.size() > 0){
+  if(col_list.size() > 0 && abs(s.change_y) > 0){// only collide if moving on that axis IMPORTANT
     Sprite collided = col_list.get(0);
     if(s.change_y > 0){
       s.setBottom(collided.getTop());
@@ -317,7 +366,7 @@ public void resolvePlatformCollisions(Sprite s, ArrayList<Sprite> walls){
          set left side of sprite to equal right side of platform
   */
 
-  if(col_list.size() > 0){
+  if(col_list.size() > 0 && abs(s.change_x) > 0){
     Sprite collided = col_list.get(0);
     if(s.change_x > 0){
         s.setRight(collided.getLeft());
@@ -325,6 +374,8 @@ public void resolvePlatformCollisions(Sprite s, ArrayList<Sprite> walls){
     else if(s.change_x < 0){
         s.setLeft(collided.getRight());
     }
+    
+    s.change_x = 0;
   }}
 
 boolean checkCollision(Sprite s1, Sprite s2){
@@ -425,22 +476,21 @@ public void onDie()
   player.setDeathAnim();
 }
 
+
+// ================================================ //
+//                    keyPressed                    //
+// ================================================ //
+
 // called whenever a key is pressed.
 void keyPressed(){
+  
+  if(gameMode == 1)
+  {
   if(key == 'a')
     player.left = true;
   if(key == 'd')
     player.right = true;
-  /*
-  if(key == 'd'){
-    player.change_x = MOVE_SPEED;
-  }
-  else if(key == 'a'){
-    player.change_x = -MOVE_SPEED;
-  }*/
-  // add an else if and check if key pressed is 'a' and if sprite is on platforms
-  // if true then give the sprite a negative change_y speed(use JUMP_SPEED)
-  // defined above
+  
   if(key == ' ' && isOnPlatforms(player, platforms)){
     player.change_y = -JUMP_SPEED;
       
@@ -449,20 +499,32 @@ void keyPressed(){
   {
     setup();
   }
-
+  if(key == '1')
+  {
+    gameMode = 2;
+  }
+  }
+  else
+  {
+    if(key == ' ')
+    {
+      if(gameMode != 2)
+      {
+        gameMode = 1;
+        setup();
+      }
+      gameMode = 1;
+    }
+  }
 }
 
 // called whenever a key is released.
 void keyReleased(){
+  if(gameMode == 1)
+  {
   if(key == 'a')
     player.left = false;
   if(key == 'd')
     player.right = false;
-  
-  /*if(key == 'd'){
-    player.change_x = 0;
   }
-  else if(key == 'a'){
-    player.change_x = 0;
-  }*/
 }
