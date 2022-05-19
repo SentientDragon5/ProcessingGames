@@ -249,18 +249,19 @@ public boolean isOnPlatforms(Sprite s, ArrayList<Sprite> walls){
 }
 public boolean isTouching(Sprite a, Sprite b)
 {
+  int dist = 1;
   boolean touching = false;
-  a.center_x += 5;
+  a.center_x += dist * a.change_x;
   touching = touching || checkCollision(a,b);
-  a.center_x -= 10;
+  a.center_x -= dist * 2 * a.change_x;
   touching = touching || checkCollision(a,b);
-  a.center_x += 5;
+  a.center_x += dist * a.change_x;
   
-  a.center_y += 5;
+  a.center_y += dist * a.change_y;
   touching = touching || checkCollision(a,b);
-  a.center_y -= 10;
+  a.center_y -= dist * 2 * a.change_y;
   touching = touching || checkCollision(a,b);
-  a.center_y += 5;
+  a.center_y += dist * a.change_y;
   return touching;
 }
 
