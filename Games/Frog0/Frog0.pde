@@ -33,6 +33,7 @@ TileMap collide;
 
 int score;
 boolean isGameOver;
+boolean lose;
 
 float view_x;
 float view_y;
@@ -54,7 +55,8 @@ void setup(){
   view_x = 0;
   view_y = 0;
   isGameOver = false;
-  score =0;
+  lose = true;
+  score = 0;
   
   red_brick = loadImage("red_brick.png");
   brown_brick = loadImage("brown_brick.png");
@@ -87,8 +89,7 @@ void draw(){
   
   if(isGameOver)
   {
-    
-  player.updateAnimation();
+    player.updateAnimation();
     /*
     fill(0,0,255);
     text("GAME OVER!", view_x + width/2 - 100, view_y + height/2);
@@ -103,7 +104,7 @@ void draw(){
   else
   {
     updateAll();
-    //collectCoins();
+    collectCoins();
     checkDeath();
   }
   if(isGameOver && transition.index < transition.standNeutral.length-1)
@@ -198,7 +199,10 @@ void collectCoins()
     }
   }
   if(coins.size() <= 0)
-  isGameOver = true;
+  {
+    lose = false;
+    isGameOver = true;
+  }
 }
 
 void scroll(){

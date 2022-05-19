@@ -6,6 +6,7 @@ public class AnimatedSprite extends Sprite{
   int direction;
   int index;
   int frame;
+  int speed;
   // implement the constructor, remember to call super() appropriately.
   // initialize direction, index and frame. The PImage arrays can be initialized
   // as null. 
@@ -16,14 +17,22 @@ public class AnimatedSprite extends Sprite{
     direction = NEUTRAL_FACING;
     index = 0;
     frame = 0;
+    speed = 5;
   }
   public AnimatedSprite(PImage[] anim, float scale)
   {
     this(anim[0], scale);
     standNeutral = anim;
     currentImages = anim;
+    speed = 5;
   }
-  
+  public AnimatedSprite(PImage[] anim, float scale, int speed)
+  {
+    this(anim[0], scale);
+    standNeutral = anim;
+    currentImages = anim;
+    this.speed = speed;
+  }
   public void updateAnimation(){
   // TODO:
   // frame is increased by 1
@@ -32,7 +41,7 @@ public class AnimatedSprite extends Sprite{
   //    call selectCurrentImages
   //    call advanceToNextImage
   frame++;
-  if(frame % 5 == 0)
+  if(frame % speed == 0)
   {
     selectDirection();
     selectCurrentImages();

@@ -17,5 +17,9 @@ public class Coin extends AnimatedSprite{
     currentImages = standNeutral;
 
   }
+  public Coin(PImage[] anim, float scale, int speed)
+  {
+    super(anim, scale, speed);
+  }
   
 }

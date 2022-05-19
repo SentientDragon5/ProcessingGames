@@ -95,7 +95,7 @@ public class Player extends AnimatedSprite{
     //       select standLeft images
     //    else select moveLeft images
     if(direction == RIGHT_FACING){
-      if(isGameOver){
+      if(isGameOver && lose){
         currentImages = dieR;
       }
       else if(inPlace){
@@ -109,7 +109,7 @@ public class Player extends AnimatedSprite{
         currentImages = walkR;
     }
     else if(direction == LEFT_FACING){
-      if(isGameOver){
+      if(isGameOver && lose){
         currentImages = dieL;
       }
       else if(inPlace){
@@ -183,4 +183,8 @@ public class Player extends AnimatedSprite{
       currentImages = dieL;
     }
   }
+  
+  
+  
+  
 }

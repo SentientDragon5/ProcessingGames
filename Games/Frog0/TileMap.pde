@@ -53,7 +53,21 @@ void createPlatforms(String filename){
       }
       int i = int(values[col]);
       Sprite s = null;
-      if(i==96 || i==97 || i==98 || i==99)
+      if(i==100)
+      {
+        //coin
+        PImage[] anim = createAnim("coin/coin_",7,"");
+        s = new AnimatedSprite(anim, 4, 5);
+        
+      }
+      else if(i==17)
+      {//FlipV anim
+        PImage[] anim = new PImage[2];
+        anim[0] = loadImage(filePath + i + ".png");
+        anim[1] = loadImage(filePath + i + "_FlipedV.png");
+        s = new AnimatedSprite(anim, 4, 16);
+      }
+      else if(i==96 || i==97 || i==98 || i==99)
       {
         PImage img;
         img = loadImage(filePath + i + ".png");
@@ -71,7 +85,10 @@ void createPlatforms(String filename){
       
       s.center_x = SPRITE_SIZE/2 + col * SPRITE_SIZE;
       s.center_y = SPRITE_SIZE/2 + row * SPRITE_SIZE;
-      tiles.add(s);
+      if(i==100)
+        coins.add(s);
+      else
+        tiles.add(s);
       
       
     }
