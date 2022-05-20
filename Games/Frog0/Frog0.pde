@@ -20,6 +20,8 @@ final static float DELTATIME = 1/60;
 
 final static float XACCEL = 0.2;
 final static float DASHVEL = 40;
+final static int DASHLENGTH = 6;
+int time;
 
 // 0 = StartMenu
 // 1 = Game
@@ -40,22 +42,26 @@ AnimatedSprite transition;
 ArrayList<Enemy> enemies; 
 ArrayList<Sprite> platforms;
 ArrayList<Sprite> coins; 
+ArrayList<Sprite> gems; 
 TileMap back;
 TileMap collide;
 
 int score;
 boolean isGameOver;
 boolean lose;
+boolean restart;
 
 float view_x;
 float view_y;
 
 
 void setup(){
+  time = 0;
   size(800, 600);
   smooth(0);
   imageMode(CENTER);
   mask = loadImage("Menu/alpha.png");
+  restart = false;
   if(gameMode == 1)
   {
     // Game
@@ -66,6 +72,7 @@ void setup(){
   transition = new AnimatedSprite(createAnim("Transition/Transition_",10,""),32);
   
   coins = new ArrayList<Sprite>();
+  gems = new ArrayList<Sprite>();
   enemies = new ArrayList<Enemy>();
   platforms = new ArrayList<Sprite>();
   view_x = 0;
@@ -81,6 +88,18 @@ void setup(){
   {
     platforms.add(collide.tiles.get(i));
   }
+  
+  //Add one enemy bc
+  int lengthGap = int(5);
+        float bLeft = 20 * SPRITE_SIZE;
+        float bRight = bLeft + lengthGap * SPRITE_SIZE;
+        Enemy enemy = new Enemy(createAnim("bug/bug_",2,""), 4, 5, bLeft, bRight);
+        enemy.center_x = SPRITE_SIZE/2 + 20 * SPRITE_SIZE;
+        enemy.center_y = SPRITE_SIZE/2 + 5 * SPRITE_SIZE;
+        // add enemy to enemies arraylist.
+        enemies.add(enemy);
+        
+        
   //end game Setup
   }
   else
@@ -145,7 +164,7 @@ void draw(){
   {
     transition.index = transition.standNeutral.length-1;
     transition.display();
-    if(!lose)
+    if(!lose )
       gameMode = 3;
     setup();
   }
@@ -169,7 +188,14 @@ void draw(){
       text("You Win!", width/2, height/2 - 150);
     }
     
+    textSize(16);
+    text("Code - Copywrite SentientDragon5 2022", width - 400, height - 75);
+    text("Level Art - https://adamatomic.itch.io/cavernas", width - 400, height - 50);
+    text("Character Art - https://lukaslundin.itch.io/froglet", width - 400, height - 25);
+    
+    text("May 2022 - v1.0", 10, height - 25);
   }
+  time++;
 }
 // ================================================ //
 //                    End Draw                      //
@@ -187,18 +213,17 @@ void checkDeath()
   boolean fallOffCliff = player.getBottom() > GROUND_LEVEL;
   if(collideEnemy || fallOffCliff)
   {
-    player.lives--;
+    onDie();
+    /*//player.lives--;
     if(player.lives ==0)
-    {
-      isGameOver = true;
-    }
+    { isGameOver = true; }
     else
     {
       //player.center_x = 100;
       //player.setBottom(GROUND_LEVEL);
       player.center_x = width/2;
       player.center_y = height/2;
-    }
+    }*/
   }
   
 }
@@ -216,7 +241,10 @@ void displayAll()
   {
     coin.display();
   }
-  
+  for(Sprite gem : gems)
+  {
+    gem.display();
+  }
   //for(Sprite s: platforms)
     //s.display();
   collide.display();
@@ -229,7 +257,10 @@ void updateAll()
   player.updateAnimation();
   player.selectCurrentImages();
   player.setXSpeed();
+  if(player.dashing)
+    player.dash();
   resolvePlatformCollisions(player, platforms);
+  
   back.update();
   collide.update();
   
@@ -243,14 +274,28 @@ void updateAll()
   {
     ((AnimatedSprite)coin).updateAnimation();
   }
+  for(Sprite gem : gems)
+  {
+    ((AnimatedSprite)gem).updateAnimation();
+  }
 }
 void collectCoins()
 {
   ArrayList<Sprite> collision_list = checkCollisionList(player, coins);
   if(collision_list.size() > 0){
     for(Sprite coin: collision_list){
-       coins.remove(coin);
-       score++;
+      if(coin instanceof Coin)
+        score++;
+      coins.remove(coin);
+    }
+  }
+  collision_list = checkCollisionList(player, gems);
+  if(collision_list.size() > 0){
+    for(Sprite gem: collision_list){
+      if(gem instanceof Gem)
+      {
+        ((Gem)gem).onCollide();
+      }
     }
   }
   if(coins.size() <= 0)
@@ -468,7 +513,8 @@ public void onDie()
   //stop motion
   //show transition
   //frog die
-  player.setDeathAnim();
+  if(!restart && lose)
+    player.setDeathAnim();
 }
 
 
@@ -493,7 +539,7 @@ void keyPressed(){
   
   player.setDashDirDown(key == 'w',key == 's',key == 'a', key == 'd');
   if(key == 'v')
-    player.dash();
+    player.dashing = true;
   if(isGameOver && key == ' ')
   {
     setup();
@@ -505,7 +551,7 @@ void keyPressed(){
   if(key == 'r')
   {
     gameMode = 1;
-    lose = false;
+    restart = true;
     isGameOver = true;
   }
   }

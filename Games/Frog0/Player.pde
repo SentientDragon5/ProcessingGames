@@ -71,6 +71,9 @@ public class Player extends AnimatedSprite{
      
      dash_x = 1.0;
      dash_y = 0.0;
+     dashing = false;
+     dashTime = -100;
+     dashes =1;
   }
   
   
@@ -105,7 +108,7 @@ public class Player extends AnimatedSprite{
     //       select standLeft images
     //    else select moveLeft images
     if(direction == RIGHT_FACING){
-      if(isGameOver && lose){
+      if(isGameOver && lose && !restart){
         currentImages = dieR;
       }
       else if(inPlace){
@@ -119,7 +122,7 @@ public class Player extends AnimatedSprite{
         currentImages = walkR;
     }
     else if(direction == LEFT_FACING){
-      if(isGameOver && lose){
+      if(isGameOver && lose && !restart){
         currentImages = dieL;
       }
       else if(inPlace){
@@ -139,6 +142,9 @@ public class Player extends AnimatedSprite{
   // Accelerate and decelerate 
   public void setXSpeed()
   {
+    if(DASHLENGTH + dashTime >= time)
+      return;
+    
     float sign = 0;
     if(change_x > 0)
       sign = 1;
@@ -220,10 +226,15 @@ public class Player extends AnimatedSprite{
     return center_y + h/2;
   }
   
-  
-  
+  int dashes;
+  boolean dashing;
+  int dashTime;
   public void dash()
   {
+    if(dashes < 1)
+      return;
+    dashes--;
+    dashTime = time;
     dash_x = 0;
     dash_y = 0;
     
@@ -252,8 +263,9 @@ public class Player extends AnimatedSprite{
       dash_y = dash_y * 0.70710678118;
     }
     
-    change_x = DASHVEL * dash_x;
-    change_y = DASHVEL * dash_y;
+    change_x = DASHVEL * dash_x * 0.7;
+    change_y = DASHVEL * dash_y * 0.5;
+    dashing = false;
     println("x " + change_x + " y " + change_y);
   }
   boolean u,d,l,r;

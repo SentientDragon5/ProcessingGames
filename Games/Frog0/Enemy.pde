@@ -18,6 +18,20 @@ public class Enemy extends AnimatedSprite{
     boundaryRight = bRight;
     change_x = 2;
   }
+  public Enemy(PImage[] anim, float scale, int speed, float bLeft, float bRight)
+  {
+    super(anim, scale, speed);
+    standNeutral = createAnim("bug/bug_",2,"");
+    currentImages = standNeutral;
+    direction = 0;
+    boundaryLeft = bLeft;
+    boundaryRight = bRight;
+    change_x = 2;
+  }
+  public void selectDirection(){
+    direction = NEUTRAL_FACING;  
+  }
+  
   void update(){
     // call update of Sprite(super)
     super.update();

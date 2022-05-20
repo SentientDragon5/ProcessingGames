@@ -60,11 +60,19 @@ void createPlatforms(String filename){
       }
       int i = int(values[col]);
       Sprite s = null;
-      if(i==100)
+      
+      if(i==101)
+      {
+        //gem
+        PImage[] anim = createAnim("Gem/Gem_",3,"");
+        s = new Gem(anim, 4, 5);
+        
+      }
+      else if(i==100)
       {
         //coin
         PImage[] anim = createAnim("coin/coin_",7,"");
-        s = new AnimatedSprite(anim, 4, 5);
+        s = new Coin(anim, 4, 5);
         
       }
       else if(i==17 || i==8 || i==9 || i==10 || i==19 || i==25)
@@ -108,6 +116,8 @@ void createPlatforms(String filename){
       s.center_y = SPRITE_SIZE/2 + row * SPRITE_SIZE;
       if(i==100)
         coins.add(s);
+      else if (i==101)
+        gems.add(s);
       else
         tiles.add(s);
       
