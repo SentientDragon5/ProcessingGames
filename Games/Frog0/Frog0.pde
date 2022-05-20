@@ -204,7 +204,6 @@ void draw(){
 void checkDeath()
 {
   collide.checkDeath();
-  //println(collide.checkDeath());
   boolean collideEnemy = false;
   for(Enemy e : enemies)
   {
@@ -456,7 +455,7 @@ public PImage[] createAnim(String path, int len, String flip)
     }
     return anim;
   }
-  
+  /*
 void createPlatforms(String filename){
   String[] lines = loadStrings(filename);
   for(int row = 0; row < lines.length; row++){
@@ -505,7 +504,7 @@ void createPlatforms(String filename){
     }
   }
 }
-
+*/
 public void onDie()
 {
   isGameOver = true;

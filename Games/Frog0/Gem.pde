@@ -28,20 +28,21 @@ public class Gem extends AnimatedSprite
   @Override
   public void selectCurrentImages(){
     
-    if(state < rechargeTime-1)
+    if(state < rechargeTime)
       state++;
     if(state >= rechargeTime)
       currentImages = full;
-    else if(rechargeTime - state > speed * charge.length)
-      currentImages = charge;
-    else
+    else if(rechargeTime - state > charge.length)
       currentImages = empty;
+    else //if(rechargeTime - state > speed * charge.length)
+      currentImages = charge;
     
-    println(currentImages == full);
   }
   public void onCollide()
   {
-    player.dashes++;
-    state = 0;
+    if(state >= rechargeTime){
+      player.dashes++;
+      state = 0;
+    }
   }
 }

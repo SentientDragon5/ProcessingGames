@@ -96,7 +96,7 @@ void createPlatforms(String filename){
         anim[1] = loadImage(filePath + 16 + "_FlipedV.png");
         s = new AnimatedSprite(anim, 4, 16);
       }
-      else if(i==96 || i==97 || i==98 || i==99)
+      else if(i==96 || i==97 || i==98 || i==99 || i==2)
       {
         PImage img;
         img = loadImage(filePath + i + ".png");

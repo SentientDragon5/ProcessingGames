@@ -45,7 +45,7 @@ public class Player extends AnimatedSprite{
     
     dieL = createAnim("Frog/frogDie_",7,"_v");
     dieR = createAnim("Frog/frogDie_",7,"");
-    
+    /*
     standLeft = new PImage[1];
     standLeft[0] = loadImage("Frog/frogIdle_0_v.png");//loadImage("player_stand_left.png");
     standRight = new PImage[1];
@@ -61,7 +61,7 @@ public class Player extends AnimatedSprite{
     moveLeft[1] = loadImage("player_walk_left2.png");
     moveRight = new PImage[2];
     moveRight[0] = loadImage("player_walk_right1.png");
-    moveRight[1] = loadImage("player_walk_right2.png"); 
+    moveRight[1] = loadImage("player_walk_right2.png"); */
     currentImages = standRight;
     
     lives = 3;
@@ -174,7 +174,6 @@ public class Player extends AnimatedSprite{
     {
       change_x -= sign * XACCEL * 2;;// * DELTATIME;
     }
-    //println(change_x);
     if(abs(change_x) < 0.2)
       change_x = 0;
     //sign =0;
@@ -266,7 +265,6 @@ public class Player extends AnimatedSprite{
     change_x = DASHVEL * dash_x * 0.7;
     change_y = DASHVEL * dash_y * 0.5;
     dashing = false;
-    println("x " + change_x + " y " + change_y);
   }
   boolean u,d,l,r;
   
