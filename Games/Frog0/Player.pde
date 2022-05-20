@@ -19,6 +19,10 @@ public class Player extends AnimatedSprite{
   boolean stopAnimating;
   
   int margin;
+  
+  float dash_x;
+  float dash_y;
+  
   public Player()
   {
     this(loadImage("Frog/frogIdle_0_v.png"),4.0);
@@ -63,7 +67,10 @@ public class Player extends AnimatedSprite{
     lives = 3;
     left = false;
     right = false;
-     margin = 1;
+     margin = 16;
+     
+     dash_x = 1.0;
+     dash_y = 0.0;
   }
   
   
@@ -213,4 +220,64 @@ public class Player extends AnimatedSprite{
     return center_y + h/2;
   }
   
+  
+  
+  public void dash()
+  {
+    dash_x = 0;
+    dash_y = 0;
+    
+    if(u && d)
+      dash_y = 0;
+    else if(u)
+      dash_y = -1;
+    else if(d)
+      dash_y = 1;
+    
+    if(l && r)
+      dash_x = 0;
+    else if(l)
+      dash_x = -1;
+    else if(r)
+      dash_x = 1;
+    
+      
+    // simple normalize
+    if(abs(dash_y) > 0)
+    {
+      dash_x = dash_x * 0.70710678118;
+    }
+    if(abs(dash_x) > 0)
+    {
+      dash_y = dash_y * 0.70710678118;
+    }
+    
+    change_x = DASHVEL * dash_x;
+    change_y = DASHVEL * dash_y;
+    println("x " + change_x + " y " + change_y);
+  }
+  boolean u,d,l,r;
+  
+  public void setDashDirDown(boolean u, boolean d, boolean l, boolean r)
+  {
+    if(u)
+      this.u = true;
+    if(d)
+      this.d = true;
+    if(l)
+      this.l = true;
+    if(r)
+      this.r = true;
+  }
+  public void setDashDirUp(boolean u, boolean d, boolean l, boolean r)
+  {
+    if(u)
+      this.u = false;
+    if(d)
+      this.d = false;
+    if(l)
+      this.l = false;
+    if(r)
+      this.r = false;
+  }
 }

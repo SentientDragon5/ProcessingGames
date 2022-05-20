@@ -1,18 +1,25 @@
 public class TileMap
 {
+  float z;
   ArrayList<Sprite> tiles;
   ArrayList<Spikes> spikes;
   public TileMap(String filename){
     tiles = new ArrayList<Sprite>();
     createPlatforms(filename);
+    z =0;
+  }
+  public TileMap(String filename, float z){
+    tiles = new ArrayList<Sprite>();
+    createPlatforms(filename);
+    this.z = z;
   }
   public void display(){
     for(Sprite s : tiles)
       s.display();
   }
-  public void display(int xOffset){
+  public void display(float xOffset){
     for(Sprite s : tiles)
-      s.display();
+      s.display(xOffset * z);
   }
   public void update()
   {
@@ -60,11 +67,25 @@ void createPlatforms(String filename){
         s = new AnimatedSprite(anim, 4, 5);
         
       }
-      else if(i==17)
+      else if(i==17 || i==8 || i==9 || i==10 || i==19 || i==25)
       {//FlipV anim
         PImage[] anim = new PImage[2];
         anim[0] = loadImage(filePath + i + ".png");
         anim[1] = loadImage(filePath + i + "_FlipedV.png");
+        s = new AnimatedSprite(anim, 4, 16);
+      }
+      else if(i==16)
+      {
+        PImage[] anim = new PImage[2];
+        anim[0] = loadImage(filePath + 16 + ".png");
+        anim[1] = loadImage(filePath + 18 + "_FlipedV.png");
+        s = new AnimatedSprite(anim, 4, 16);
+      }
+      else if(i==18)
+      {
+        PImage[] anim = new PImage[2];
+        anim[0] = loadImage(filePath + 18 + ".png");
+        anim[1] = loadImage(filePath + 16 + "_FlipedV.png");
         s = new AnimatedSprite(anim, 4, 16);
       }
       else if(i==96 || i==97 || i==98 || i==99)

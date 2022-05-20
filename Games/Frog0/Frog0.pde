@@ -19,7 +19,7 @@ final static int GROUND_LEVEL = 1200;//600;
 final static float DELTATIME = 1/60;
 
 final static float XACCEL = 0.2;
-
+final static float DASHVEL = 40;
 
 // 0 = StartMenu
 // 1 = Game
@@ -33,12 +33,14 @@ Sprite title;
 PImage playerImage;
 Player player;
 PImage snow, crate, red_brick, brown_brick, coin;
+PImage mask;
 
 AnimatedSprite transition;
 
 ArrayList<Enemy> enemies; 
 ArrayList<Sprite> platforms;
 ArrayList<Sprite> coins; 
+TileMap back;
 TileMap collide;
 
 int score;
@@ -53,7 +55,7 @@ void setup(){
   size(800, 600);
   smooth(0);
   imageMode(CENTER);
-  
+  mask = loadImage("Menu/alpha.png");
   if(gameMode == 1)
   {
     // Game
@@ -72,6 +74,7 @@ void setup(){
   lose = true;
   score = 0;
   
+  back = new TileMap("back.csv", 0.2);
   collide = new TileMap("collide.csv");
   //platforms = collide.tiles;
   for(int i=0; i<collide.tiles.size(); i++)
@@ -100,8 +103,8 @@ void draw(){
   if(gameMode == 1)
   {
   //background(255);
-  //background(33,38,63);
-  background(29,32,48);
+  background(33,38,63); // bg
+  //background(29,32,48); // Bit darker
   scroll();
   displayAll();
   
@@ -201,7 +204,8 @@ void checkDeath()
 }
 void displayAll()
 {
-  player.display();
+  back.display(view_x);
+  
   
   for(Enemy e : enemies)
   {
@@ -217,6 +221,8 @@ void displayAll()
     //s.display();
   collide.display();
   
+  player.display();
+  //front.display(view.x);
 }
 void updateAll()
 {
@@ -224,6 +230,7 @@ void updateAll()
   player.selectCurrentImages();
   player.setXSpeed();
   resolvePlatformCollisions(player, platforms);
+  back.update();
   collide.update();
   
   for(Enemy e : enemies)
@@ -236,7 +243,6 @@ void updateAll()
   {
     ((AnimatedSprite)coin).updateAnimation();
   }
-  
 }
 void collectCoins()
 {
@@ -353,19 +359,8 @@ public void resolvePlatformCollisions(Sprite s, ArrayList<Sprite> walls){
 
   // move in x-direction by adding change_x to center_x to update x position.
   s.center_x += s.change_x;
-  
-  // Now resolve any collision in the x-direction:
-  // compute collision_list between sprite and walls(platforms).   
+    
   col_list = checkCollisionList(s, walls);
-
-  /* if collision list is nonempty:
-       get the first platform from collision list
-       if sprite is moving right
-         set right side of sprite to equal left side of platform
-       else if sprite is moving left
-         set left side of sprite to equal right side of platform
-  */
-
   if(col_list.size() > 0 && abs(s.change_x) > 0){
     Sprite collided = col_list.get(0);
     if(s.change_x > 0){
@@ -495,6 +490,10 @@ void keyPressed(){
     player.change_y = -JUMP_SPEED;
       
   }
+  
+  player.setDashDirDown(key == 'w',key == 's',key == 'a', key == 'd');
+  if(key == 'v')
+    player.dash();
   if(isGameOver && key == ' ')
   {
     setup();
@@ -502,6 +501,12 @@ void keyPressed(){
   if(key == '1')
   {
     gameMode = 2;
+  }
+  if(key == 'r')
+  {
+    gameMode = 1;
+    lose = false;
+    isGameOver = true;
   }
   }
   else
@@ -526,5 +531,6 @@ void keyReleased(){
     player.left = false;
   if(key == 'd')
     player.right = false;
+    player.setDashDirUp(key == 'w',key == 's',key == 'a', key == 'd');
   }
 }

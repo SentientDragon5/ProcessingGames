@@ -1,4 +1,3 @@
-// YOU DO NOT NEED TO MODIFY THIS CLASS.
 
 public class Sprite{
   PImage image;
@@ -28,7 +27,12 @@ public class Sprite{
     change_y = 0;
   }
   public void display(){
+    //if(image.height == mask.height)
+      //image.mask(mask);
      image(image, center_x, center_y, w, h); 
+  }
+  public void display(float offsetX){
+     image(image, center_x + offsetX, center_y, w, h); 
   }
   public void update(){
      center_x += change_x;
