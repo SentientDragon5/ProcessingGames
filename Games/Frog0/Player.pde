@@ -22,6 +22,7 @@ public class Player extends AnimatedSprite{
   
   float dash_x;
   float dash_y;
+  boolean grounded;
   
   public Player()
   {
@@ -73,7 +74,8 @@ public class Player extends AnimatedSprite{
      dash_y = 0.0;
      dashing = false;
      dashTime = -100;
-     dashes =1;
+     dashes = 1;
+     grounded = true;
   }
   
   

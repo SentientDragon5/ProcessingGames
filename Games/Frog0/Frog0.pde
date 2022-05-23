@@ -1,6 +1,13 @@
 /*
   Logan Shehane
+TODO
+Add levels 
+create levels
+add file to hold enemy data and end location of level
+
 */
+
+
 
 final static float MOVE_SPEED = 4;
 final static float SPRITE_SCALE = 50.0/128;
@@ -26,6 +33,7 @@ int time;
 // 0 = StartMenu
 // 1 = Game
 // 2 = Pause
+// 3 = Win
 int gameMode = 0;
 
 // Menu
@@ -54,6 +62,9 @@ boolean restart;
 float view_x;
 float view_y;
 
+int level = -1;
+float win_x;
+float win_y;
 
 void setup(){
   time = 0;
@@ -64,10 +75,14 @@ void setup(){
   restart = false;
   if(gameMode == 1)
   {
+    String[] dataTxt = loadStrings("Levels/Map_" + level + ".txt");
     // Game
     player = new Player();//new Player(playerImage, 0.8);
-  player.center_x = width/2;
-  player.center_y = height/2;
+  player.center_x = SPRITE_SIZE/2 + int(split(dataTxt[0], " ")[1]) * SPRITE_SIZE;//width/2;
+  player.center_y = SPRITE_SIZE/2 + int(split(dataTxt[0], " ")[2]) * SPRITE_SIZE;//height/2;
+  
+  win_x = SPRITE_SIZE/2 + int(split(dataTxt[1], " ")[1]) * SPRITE_SIZE;
+  win_y = SPRITE_SIZE/2 + int(split(dataTxt[1], " ")[2]) * SPRITE_SIZE;
   
   transition = new AnimatedSprite(createAnim("Transition/Transition_",10,""),32);
   
@@ -81,8 +96,8 @@ void setup(){
   lose = true;
   score = 0;
   
-  back = new TileMap("back.csv", 0.2);
-  collide = new TileMap("collide.csv");
+  back = new TileMap("Levels/Map_" + level + "_back.csv", 0.2);
+  collide = new TileMap("Levels/Map_" + level + ".csv");
   //platforms = collide.tiles;
   for(int i=0; i<collide.tiles.size(); i++)
   {
@@ -90,6 +105,7 @@ void setup(){
   }
   
   //Add one enemy bc
+  String[] values = split(lines[r], " ");
   int lengthGap = int(5);
         float bLeft = 20 * SPRITE_SIZE;
         float bRight = bLeft + lengthGap * SPRITE_SIZE;
@@ -177,17 +193,27 @@ void draw(){
     title.display();
     
     fill(255);
-    text("Press Space to start", width/2, height/2 + 50);
     //text("Lives: " + player.lives, view_x + 50, view_y +100);
     if(gameMode == 2)
     {
-      text("GamePaused", width/2, height/2 -150);
+      text("Press Space to resume", width/2 - 50, height/2 + 50);
+      text("Game Paused", width/2, height/2 -150);
     }
     if(gameMode == 3)
     {
       text("You Win!", width/2, height/2 - 150);
     }
-    
+    if(gameMode != 2)
+    {
+      //text("Press Space to start", width/2 - 50, height/2 + 50);
+      text("Press the number of the level that you want", 60, height/2 + 100);
+      textSize(16);
+      text("0 - Tutorial", width/2 - 200, height/2 + 130);
+      text("1 - The Depths", width/2 - 200, height/2 + 150);
+      text("2 - Deeper Still", width/2 - 200, height/2 + 170);
+      text("9 - Original testing world", width/2 - 200, height/2 + 190);
+      
+    }
     textSize(16);
     text("Code - Copywrite SentientDragon5 2022", width - 400, height - 75);
     text("Level Art - https://adamatomic.itch.io/cavernas", width - 400, height - 50);
@@ -390,10 +416,13 @@ public void resolvePlatformCollisions(Sprite s, ArrayList<Sprite> walls){
          set top of sprite to equal bottom of platform
        set sprite's change_y to 0
   */
+  player.grounded = false;
   if(col_list.size() > 0 && abs(s.change_y) > 0){// only collide if moving on that axis IMPORTANT
     Sprite collided = col_list.get(0);
     if(s.change_y > 0){
       s.setBottom(collided.getTop());
+      player.grounded = true;
+      player.dashes = 1;
     }
     else if(s.change_y < 0){
       s.setTop(collided.getBottom());
@@ -517,6 +546,13 @@ public void onDie()
 }
 
 
+String getData(String filename, int r, int c){
+  String[] lines = loadStrings(filename);
+  String[] values = split(lines[r], " ");
+  return values[c];
+}
+
+
 // ================================================ //
 //                    keyPressed                    //
 // ================================================ //
@@ -539,6 +575,8 @@ void keyPressed(){
   player.setDashDirDown(key == 'w',key == 's',key == 'a', key == 'd');
   if(key == 'v')
     player.dashing = true;
+  else
+    player.dashing = false;
   if(isGameOver && key == ' ')
   {
     setup();
@@ -560,6 +598,48 @@ void keyPressed(){
     {
       if(gameMode != 2)
       {
+        level = 0;
+        gameMode = 1;
+        setup();
+      }
+      gameMode = 1;
+    }
+    
+    if(key == '0')
+    {
+      if(gameMode != 2)
+      {
+        level = 0;
+        gameMode = 1;
+        setup();
+      }
+      gameMode = 1;
+    }
+    if(key == '1')
+    {
+      if(gameMode != 2)
+      {
+        level = 1;
+        gameMode = 1;
+        setup();
+      }
+      gameMode = 1;
+    }
+    if(key == '2')
+    {
+      if(gameMode != 2)
+      {
+        level = 2;
+        gameMode = 1;
+        setup();
+      }
+      gameMode = 1;
+    }
+    if(key == '9')
+    {
+      if(gameMode != 2)
+      {
+        level = -1;
         gameMode = 1;
         setup();
       }
