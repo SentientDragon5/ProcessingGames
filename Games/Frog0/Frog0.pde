@@ -51,6 +51,7 @@ ArrayList<Enemy> enemies;
 ArrayList<Sprite> platforms;
 ArrayList<Sprite> coins; 
 ArrayList<Sprite> gems; 
+ArrayList<GameText> texts;
 TileMap back;
 TileMap collide;
 
@@ -90,6 +91,7 @@ void setup(){
   gems = new ArrayList<Sprite>();
   enemies = new ArrayList<Enemy>();
   platforms = new ArrayList<Sprite>();
+  texts = new ArrayList<GameText>();
   view_x = 0;
   view_y = 0;
   isGameOver = false;
@@ -105,8 +107,12 @@ void setup(){
   }
   
   //Add one enemy bc
-  String[] values = split(lines[r], " ");
-  int lengthGap = int(5);
+  for(int i=2; i<dataTxt.length; i++)
+  {
+    String[] values = split(dataTxt[i], ",");
+    if(values[0].equals("e"))
+    {
+      int lengthGap = int(5);
         float bLeft = 20 * SPRITE_SIZE;
         float bRight = bLeft + lengthGap * SPRITE_SIZE;
         Enemy enemy = new Enemy(createAnim("bug/bug_",2,""), 4, 5, bLeft, bRight);
@@ -114,7 +120,14 @@ void setup(){
         enemy.center_y = SPRITE_SIZE/2 + 5 * SPRITE_SIZE;
         // add enemy to enemies arraylist.
         enemies.add(enemy);
+    }
+    else if(values[0].equals("t"))
+    {
+      texts.add(new GameText(values[3], SPRITE_SIZE/2 + int(values[1])* SPRITE_SIZE, SPRITE_SIZE/2 + int(values[2])* SPRITE_SIZE, 32, 255, 255, 255));
+    }
         
+  }
+  
         
   //end game Setup
   }
