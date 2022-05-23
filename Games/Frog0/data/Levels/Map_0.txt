@@ -1,4 +1,9 @@
 s,5,16
 w,28,16
-e,17,15
-t,10,10,Hello this is some data!
+e,25,15,1
+t,10,7,Welcome to Froglet!
+t,10,8,Use A and D to move Left and Right
+t,10,9,Use SPACE to jump
+t,45,7,Use V to Dash
+t,45,8,Use WASD to direct the Dash
+t,60,7,Gems recharge your Dash

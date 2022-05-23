@@ -79,11 +79,11 @@ void setup(){
     String[] dataTxt = loadStrings("Levels/Map_" + level + ".txt");
     // Game
     player = new Player();//new Player(playerImage, 0.8);
-  player.center_x = SPRITE_SIZE/2 + int(split(dataTxt[0], " ")[1]) * SPRITE_SIZE;//width/2;
-  player.center_y = SPRITE_SIZE/2 + int(split(dataTxt[0], " ")[2]) * SPRITE_SIZE;//height/2;
+  player.center_x = SPRITE_SIZE/2 + int(split(dataTxt[0], ",")[1]) * SPRITE_SIZE;//width/2;
+  player.center_y = SPRITE_SIZE/2 + int(split(dataTxt[0], ",")[2]) * SPRITE_SIZE;//height/2;
   
-  win_x = SPRITE_SIZE/2 + int(split(dataTxt[1], " ")[1]) * SPRITE_SIZE;
-  win_y = SPRITE_SIZE/2 + int(split(dataTxt[1], " ")[2]) * SPRITE_SIZE;
+  win_x = SPRITE_SIZE/2 + int(split(dataTxt[1], ",")[1]) * SPRITE_SIZE;
+  win_y = SPRITE_SIZE/2 + int(split(dataTxt[1], ",")[2]) * SPRITE_SIZE;
   
   transition = new AnimatedSprite(createAnim("Transition/Transition_",10,""),32);
   
@@ -112,18 +112,18 @@ void setup(){
     String[] values = split(dataTxt[i], ",");
     if(values[0].equals("e"))
     {
-      int lengthGap = int(5);
-        float bLeft = 20 * SPRITE_SIZE;
+      int lengthGap = int(values[3]);
+        float bLeft = int(values[1]) * SPRITE_SIZE;
         float bRight = bLeft + lengthGap * SPRITE_SIZE;
         Enemy enemy = new Enemy(createAnim("bug/bug_",2,""), 4, 5, bLeft, bRight);
-        enemy.center_x = SPRITE_SIZE/2 + 20 * SPRITE_SIZE;
-        enemy.center_y = SPRITE_SIZE/2 + 5 * SPRITE_SIZE;
+        enemy.center_x = SPRITE_SIZE/2 + int(values[1]) * SPRITE_SIZE;
+        enemy.center_y = SPRITE_SIZE/2 + int(values[2]) * SPRITE_SIZE;
         // add enemy to enemies arraylist.
         enemies.add(enemy);
     }
     else if(values[0].equals("t"))
     {
-      texts.add(new GameText(values[3], SPRITE_SIZE/2 + int(values[1])* SPRITE_SIZE, SPRITE_SIZE/2 + int(values[2])* SPRITE_SIZE, 32, 255, 255, 255));
+      texts.add(new GameText(values[3], SPRITE_SIZE/2 + int(values[1])* SPRITE_SIZE, SPRITE_SIZE/2 + int(values[2])* SPRITE_SIZE, 32, 255, 255, 255, 0.25));
     }
         
   }
@@ -268,7 +268,10 @@ void checkDeath()
 void displayAll()
 {
   back.display(view_x);
-  
+  for(GameText t : texts)
+  {
+    t.display(view_x);
+  }
   
   for(Enemy e : enemies)
   {
