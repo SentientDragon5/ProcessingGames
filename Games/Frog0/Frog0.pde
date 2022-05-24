@@ -1,9 +1,5 @@
 /*
   Logan Shehane
-TODO
-Add levels 
-create levels
-add file to hold enemy data and end location of level
 
 */
 import processing.sound.*;
@@ -193,7 +189,7 @@ void draw(){
   
   fill(255,0,0);
   //text("Coins: " + score, view_x + 50, view_y + 50);
-  text("Lives: " + lives, view_x + 50, view_y +100);
+  //text("Lives: " + lives, view_x + 50, view_y +100);//UNCOMMENT TO SHOW LIVES
   
   if(isGameOver)
   {
@@ -281,8 +277,8 @@ void draw(){
 
 void checkDeath()
 {
-  collide.checkDeath();
-  boolean collideEnemy = false;
+  
+  boolean collideEnemy = collide.checkDeath();
   for(Enemy e : enemies)
   {
     collideEnemy = collideEnemy || checkCollision(player, e);
@@ -291,11 +287,6 @@ void checkDeath()
   if(collideEnemy || fallOffCliff)
   {
     onDie();
-    lives--;
-    if(lives ==0)
-    { isGameOver = true; 
-  gameMode = 5;  
-  }
     /*//player.lives--;
     if(player.lives ==0)
     { isGameOver = true; }
@@ -620,6 +611,12 @@ public void onDie()
   //frog die
   if(!restart && lose)
     player.setDeathAnim();
+  /* UNCOMMENT IF LIVES
+    lives--;
+    if(lives ==0)
+    { isGameOver = true; 
+  gameMode = 5;  
+  }*/
 }
 
 

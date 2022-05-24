@@ -45,9 +45,10 @@ public class TileMap
       if( s instanceof Spikes)
       {      
         //((Spikes)s).updateAnimation();
-        if(isTouching(player, s))
-          onDie();
-        collideSpike = collideSpike || checkCollision(player, s);
+        //if(isTouching(player, s))
+          //onDie();
+        //collideSpike = collideSpike || checkCollision(player, s);
+        collideSpike = collideSpike || isTouching(player, s);
       }
     }
     return collideSpike;
