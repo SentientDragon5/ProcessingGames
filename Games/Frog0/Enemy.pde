@@ -52,4 +52,11 @@ public class Enemy extends AnimatedSprite{
     }
 
   }
+  
+  
+  @Override
+  void OnCollide()
+  {
+    
+  }
 }

@@ -15,7 +15,13 @@ public class TileMap
   }
   public void display(){
     for(Sprite s : tiles)
+    {
+      //boolean x = s.getRight() >= view_x + width || s.getLeft() <= view_x;
+      //boolean y = s.getTop() >= view_x + height || s.getBottom() <= view_x;
+      
+      //if(!x && !y)
       s.display();
+    }
   }
   public void display(float xOffset){
     for(Sprite s : tiles)
@@ -75,7 +81,7 @@ void createPlatforms(String filename){
         s = new Coin(anim, 4, 5);
         
       }
-      else if(i==17 || i==8 || i==9 || i==10 || i==19 || i==25)
+      else if(i==17 || i==8 || i==9 || i==10 || i==19 || i==25 || i==0)
       {//FlipV anim
         PImage[] anim = new PImage[2];
         anim[0] = loadImage(filePath + i + ".png");

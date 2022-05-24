@@ -45,4 +45,10 @@ public class Spikes extends Sprite
   float getBottom(){
     return center_y + h/2;
   }
+  
+  @Override
+  void OnCollide()
+  {
+    
+  }
 }

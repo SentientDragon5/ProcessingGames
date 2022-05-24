@@ -12,5 +12,16 @@ public class Coin extends AnimatedSprite{
   {
     super(anim, scale, speed);
   }
-  
+  public Coin(PImage[] anim,float x, float y, float scale, int speed, int index)
+  {
+    super(anim, scale, speed);
+    this.index = index;
+    center_x = x;
+    center_y = y;
+  }
+  @Override
+  void OnCollide()
+  {
+    
+  }
 }

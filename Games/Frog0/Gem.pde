@@ -38,6 +38,7 @@ public class Gem extends AnimatedSprite
       currentImages = charge;
     
   }
+  
   public void onCollide()
   {
     if(state >= rechargeTime){

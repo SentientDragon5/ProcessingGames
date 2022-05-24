@@ -6,8 +6,7 @@ create levels
 add file to hold enemy data and end location of level
 
 */
-
-
+import processing.sound.*;
 
 final static float MOVE_SPEED = 4;
 final static float SPRITE_SCALE = 50.0/128;
@@ -30,6 +29,7 @@ final static float DASHVEL = 40;
 final static int DASHLENGTH = 6;
 int time;
 
+
 // 0 = StartMenu
 // 1 = Game
 // 2 = Pause
@@ -39,7 +39,18 @@ int gameMode = 0;
 // Menu
 Sprite title;
 
+// Music
+SoundFile menuMusic;
+SoundFile gameMusic;
+SoundFile jumpSFX;
+SoundFile landSFX;
+SoundFile walkSFX;
+//https://mixkit.co/free-sound-effects/coin/
+SoundFile coinSFX;
+
+
 // Game
+boolean playingMusic = false;
 PImage playerImage;
 Player player;
 PImage snow, crate, red_brick, brown_brick, coin;
@@ -56,6 +67,8 @@ TileMap back;
 TileMap collide;
 
 int score;
+int lastCoinTime;
+AnimatedSprite coinShow;
 boolean isGameOver;
 boolean lose;
 boolean restart;
@@ -67,6 +80,9 @@ int level = -1;
 float win_x;
 float win_y;
 
+//REMOVE
+int lives = 3;
+
 void setup(){
   time = 0;
   size(800, 600);
@@ -76,6 +92,8 @@ void setup(){
   restart = false;
   if(gameMode == 1)
   {
+    if(lives <= 0)
+     { lives = 3; }
     String[] dataTxt = loadStrings("Levels/Map_" + level + ".txt");
     // Game
     player = new Player();//new Player(playerImage, 0.8);
@@ -97,6 +115,7 @@ void setup(){
   isGameOver = false;
   lose = true;
   score = 0;
+  lastCoinTime = 0;
   
   back = new TileMap("Levels/Map_" + level + "_back.csv", 0.2);
   collide = new TileMap("Levels/Map_" + level + ".csv");
@@ -127,12 +146,26 @@ void setup(){
     }
         
   }
+  coinShow = new AnimatedSprite(createAnim("coin/coin_",7,""), 4, 5);
+  coinShow.center_x = view_x + 25;
+  coinShow.center_y = view_y + 50;
   
-        
+  if(!playingMusic)
+  {
+    gameMusic = new SoundFile(this, "Music/dungeonTheme.wav");
+    gameMusic.loop();
+    gameMusic.play();
+    playingMusic = true;
+  }
+  jumpSFX = new SoundFile(this, "Music/JumpSFX.wav");
+  coinSFX = new SoundFile(this, "Music/coin.wav");
   //end game Setup
   }
   else
   {
+    //menuMusic = new SoundFile(this, "Music/dungeonTheme.mp3");
+    //menuMusic.loop();
+    //menuMusic.play();
     title = new Sprite(loadImage("Menu/Froglet.png"), .4);
   }
   
@@ -160,7 +193,7 @@ void draw(){
   
   fill(255,0,0);
   //text("Coins: " + score, view_x + 50, view_y + 50);
-  //text("Lives: " + player.lives, view_x + 50, view_y +100);
+  text("Lives: " + lives, view_x + 50, view_y +100);
   
   if(isGameOver)
   {
@@ -216,6 +249,10 @@ void draw(){
     {
       text("You Win!", width/2, height/2 - 150);
     }
+    if(gameMode == 5)
+    {
+      text("You Lose!", width/2, height/2 - 150);
+    }
     if(gameMode != 2)
     {
       //text("Press Space to start", width/2 - 50, height/2 + 50);
@@ -228,9 +265,11 @@ void draw(){
       
     }
     textSize(16);
-    text("Code - Copywrite SentientDragon5 2022", width - 400, height - 75);
-    text("Level Art - https://adamatomic.itch.io/cavernas", width - 400, height - 50);
-    text("Character Art - https://lukaslundin.itch.io/froglet", width - 400, height - 25);
+    text("Code - Copywrite SentientDragon5 2022", width - 400, height - 100);
+    text("Level Art - https://adamatomic.itch.io/cavernas", width - 400, height - 75);
+    text("Character Art - https://lukaslundin.itch.io/froglet", width - 400, height - 50);
+    text("Music - https://opengameart.org/content/platformer-game-music-pack", width - 400, height - 25);
+    
     
     text("May 2022 - v1.0", 10, height - 25);
   }
@@ -252,6 +291,11 @@ void checkDeath()
   if(collideEnemy || fallOffCliff)
   {
     onDie();
+    lives--;
+    if(lives ==0)
+    { isGameOver = true; 
+  gameMode = 5;  
+  }
     /*//player.lives--;
     if(player.lives ==0)
     { isGameOver = true; }
@@ -322,11 +366,28 @@ void updateAll()
 }
 void collectCoins()
 {
+  if(time - lastCoinTime < 40)
+  {
+      fill(227,200,68);
+      textSize(32);
+      coinShow.center_x = view_x + 25;
+      coinShow.center_y = view_y + 50;
+      coinShow.updateAnimation();
+      coinShow.display();
+      //new Sprite("coin/coin_0", view_x + 25, view_y + 50, 4, 5, time % 5).display();
+      text(score, view_x + 50, view_y + 50);
+      fill(255);
+  }
+  
   ArrayList<Sprite> collision_list = checkCollisionList(player, coins);
   if(collision_list.size() > 0){
     for(Sprite coin: collision_list){
       if(coin instanceof Coin)
+      {
+        lastCoinTime = time;
+        coinSFX.play();
         score++;
+      }
       coins.remove(coin);
     }
   }
@@ -585,7 +646,7 @@ void keyPressed(){
   
   if(key == ' ' && isOnPlatforms(player, platforms)){
     player.change_y = -JUMP_SPEED;
-      
+      jumpSFX.play();
   }
   
   player.setDashDirDown(key == 'w',key == 's',key == 'a', key == 'd');

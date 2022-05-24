@@ -1,6 +1,8 @@
 s,5,16
 w,28,16
-e,25,15,1
+e,27,15,7
+e,55,5,12
+e,15,5,9
 t,10,7,Welcome to Froglet!
 t,10,8,Use A and D to move Left and Right
 t,10,9,Use SPACE to jump

@@ -63,4 +63,9 @@ public class Sprite{
   float getBottom(){
     return center_y + h/2;
   }
+  
+  void OnCollide()
+  {
+    
+  }
 }

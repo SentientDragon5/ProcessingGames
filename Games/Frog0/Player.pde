@@ -11,8 +11,22 @@ public class Player extends AnimatedSprite{
   PImage[] walkR;
   PImage[] jumpL;
   PImage[] jumpR;
+  PImage[] fallL;
+  PImage[] fallR;
   PImage[] dieL;
   PImage[] dieR;
+  
+  
+  PImage[] idleLb;
+  PImage[] idleRb;
+  PImage[] walkLb;
+  PImage[] walkRb;
+  PImage[] jumpLb;
+  PImage[] jumpRb;
+  PImage[] fallLb;
+  PImage[] fallRb;
+  PImage[] dieLb;
+  PImage[] dieRb;
   
   boolean onPlatform;
   int lives;
@@ -43,9 +57,26 @@ public class Player extends AnimatedSprite{
     
     jumpL = createAnim("Frog/frogJump_",4,5,"_v");
     jumpR = createAnim("Frog/frogJump_",4,5,"");
+    fallL = createAnim("Frog/frogJump_",6,7,"_v");
+    fallR = createAnim("Frog/frogJump_",6,7,"");
     
     dieL = createAnim("Frog/frogDie_",7,"_v");
     dieR = createAnim("Frog/frogDie_",7,"");
+    
+    
+    idleLb = createAnim("FrogB/frogBIdle1_",7,"v");
+    idleRb = createAnim("FrogB/frogBIdle1_",7,"");
+    
+    walkLb = createAnim("FrogB/frogBWalk_",7,"v");
+    walkRb = createAnim("FrogB/frogBWalk_",7,"");
+    
+    jumpLb = createAnim("FrogB/frogBJump_",4,5,"v");
+    jumpRb = createAnim("FrogB/frogBJump_",4,5,"");
+    fallLb = createAnim("FrogB/frogBJump_",6,7,"v");
+    fallRb = createAnim("FrogB/frogBJump_",6,7,"");
+    
+    dieLb = createAnim("FrogB/frogBDie_",7,"v");
+    dieRb = createAnim("FrogB/frogBDie_",7,"");
     /*
     standLeft = new PImage[1];
     standLeft[0] = loadImage("Frog/frogIdle_0_v.png");//loadImage("player_stand_left.png");
@@ -100,15 +131,9 @@ public class Player extends AnimatedSprite{
   }
   @Override
   public void selectCurrentImages(){
-    // TODO: Some of the code is already given to you.
-    // if direction is RIGHT_FACING
-    //    if inPlace
-    //       select standRight images
-    //    else select moveRight images
-    // else if direction is LEFT_FACING
-    //    if inPlace
-    //       select standLeft images
-    //    else select moveLeft images
+    
+    if(dashes >= 1)
+    {
     if(direction == RIGHT_FACING){
       if(isGameOver && lose && !restart){
         currentImages = dieR;
@@ -118,7 +143,10 @@ public class Player extends AnimatedSprite{
       }
       else if(!onPlatform)
       {
-        currentImages = jumpR;
+        if(change_y <= 0)
+          currentImages = jumpR;
+        else
+          currentImages = fallR;
       }
       else
         currentImages = walkR;
@@ -132,12 +160,52 @@ public class Player extends AnimatedSprite{
       }
       else if(!onPlatform)
       {
-        currentImages = jumpL;
+        if(change_y <= 0)
+          currentImages = jumpL;
+        else
+          currentImages = fallL;
       }
       else
         currentImages = walkL;
     }
-    
+    }
+    else
+    {
+      if(direction == RIGHT_FACING){
+      if(isGameOver && lose && !restart){
+        currentImages = dieRb;
+      }
+      else if(inPlace){
+        currentImages = idleRb;
+      }
+      else if(!onPlatform)
+      {
+        if(change_y <= 0)
+          currentImages = jumpRb;
+        else
+          currentImages = fallRb;
+      }
+      else
+        currentImages = walkRb;
+    }
+    else if(direction == LEFT_FACING){
+      if(isGameOver && lose && !restart){
+        currentImages = dieLb;
+      }
+      else if(inPlace){
+        currentImages = idleLb;
+      }
+      else if(!onPlatform)
+      {
+        if(change_y <= 0)
+          currentImages = jumpLb;
+        else
+          currentImages = fallLb;
+      }
+      else
+        currentImages = walkLb;
+    }
+    }
   }
   boolean left;
   boolean right;
@@ -232,6 +300,7 @@ public class Player extends AnimatedSprite{
   int dashTime;
   public void dash()
   {
+    jumpSFX.play();
     if(dashes < 1)
       return;
     dashes--;
