@@ -23,6 +23,7 @@ final static float DELTATIME = 1/60;
 final static float XACCEL = 0.2;
 final static float DASHVEL = 40;
 final static int DASHLENGTH = 6;
+final static boolean PLAYMUSIC = false;
 int time;
 
 
@@ -146,7 +147,7 @@ void setup(){
   coinShow.center_x = view_x + 25;
   coinShow.center_y = view_y + 50;
   
-  if(!playingMusic)
+  if(!playingMusic && PLAYMUSIC)
   {
     gameMusic = new SoundFile(this, "Music/dungeonTheme.wav");
     gameMusic.loop();
